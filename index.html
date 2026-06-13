@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Duration of Labor – Stages & Timing | Adele Pillitteri MCN</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <style>
+        .transition-all { transition: all 0.3s ease; }
+        .recall-mode .reveal-text {
+            background-color: #cbd5e1;
+            color: transparent;
+            border-radius: 0.375rem;
+            padding: 0 0.25rem;
+            cursor: pointer;
+            transition: background-color 0.2s, color 0.2s;
+            box-shadow: inset 0 0 0 1px #94a3b8;
+        }
+        .recall-mode .reveal-text:hover,
+        .recall-mode .reveal-text.revealed {
+            background-color: #fed7aa;
+            color: #1e293b;
+            box-shadow: none;
+        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #b45309; border-radius: 8px; }
+        .content-section { animation: fade 0.3s ease; }
+        @keyframes fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        .quiz-feedback-correct { background-color: #dcfce7; border-left: 4px solid #22c55e; }
+        .quiz-feedback-wrong { background-color: #fee2e2; border-left: 4px solid #ef4444; }
+        .locked-section { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: { extend: { colors: { labor: { light: '#ffedd5', DEFAULT: '#b45309', dark: '#78350f' } } } }
+        }
+    </script>
+</head>
+<body class="bg-slate-50 h-screen flex flex-col md:flex-row font-sans text-slate-800 overflow-hidden">
+
+    <!-- Mobile Header -->
+    <div class="md:hidden bg-labor-dark text-white p-4 flex justify-between items-center shadow-md z-30 shrink-0">
+        <button onclick="toggleMobileMenu()" class="text-white focus:outline-none z-40">
+            <i class="fa-solid fa-bars text-2xl"></i>
+        </button>
+        <h1 class="font-bold text-lg absolute left-1/2 transform -translate-x-1/2 pointer-events-none">
+            <i class="fa-solid fa-hourglass-half mr-2"></i> Duration of Labor
+        </h1>
+        <div class="w-8"></div>
+    </div>
+
+    <!-- Sidebar Navigation -->
+    <nav id="sidebar" class="hidden md:flex flex-col w-full md:w-80 bg-white shadow-2xl h-full absolute md:relative z-30 transition-transform duration-300 shrink-0 border-r border-slate-200">
+        <div class="p-6 bg-gradient-to-br from-labor-dark to-labor text-white hidden md:block shrink-0">
+            <h1 class="font-black text-2xl tracking-wide"><i class="fa-solid fa-hourglass-start mr-2"></i> Duration of Labor</h1>
+            <p class="text-sm text-amber-200 mt-1 font-medium">Stages, Phases, and Timings | Pillitteri 7e</p>
+        </div>
+        <div class="flex-1 overflow-y-auto py-4">
+            <ul class="space-y-1 text-sm font-medium">
+                <li><button onclick="showSection('home')" id="btn-home" class="nav-btn w-full text-left px-6 py-3 bg-labor-light text-labor-dark border-r-4 border-labor-dark transition-colors"><i class="fa-solid fa-house w-6 nav-icon"></i><i class="fa-solid fa-lock w-6 hidden"></i> Home / Start</button></li>
+                <li><button onclick="showSection('stages')" id="btn-stages" class="nav-btn w-full text-left px-6 py-3 text-slate-600 hover:bg-slate-50 transition-colors locked-section"><i class="fa-solid fa-chart-line w-6 nav-icon hidden"></i><i class="fa-solid fa-lock w-6 text-slate-400"></i> Overview: 4 Stages</button></li>
+                <li><button onclick="showSection('firststage')" id="btn-firststage" class="nav-btn w-full text-left px-6 py-3 text-slate-600 hover:bg-slate-50 transition-colors locked-section"><i class="fa-solid fa-chart-simple w-6 nav-icon hidden"></i><i class="fa-solid fa-lock w-6 text-slate-400"></i> First Stage (Dilation) Phases</button></li>
+                <li><button onclick="showSection('secondstage')" id="btn-secondstage" class="nav-btn w-full text-left px-6 py-3 text-slate-600 hover:bg-slate-50 transition-colors locked-section"><i class="fa-solid fa-baby-carriage w-6 nav-icon hidden"></i><i class="fa-solid fa-lock w-6 text-slate-400"></i> Second Stage (Expulsion)</button></li>
+                <li><button onclick="showSection('thirdfourth')" id="btn-thirdfourth" class="nav-btn w-full text-left px-6 py-3 text-slate-600 hover:bg-slate-50 transition-colors locked-section"><i class="fa-solid fa-hand-holding-heart w-6 nav-icon hidden"></i><i class="fa-solid fa-lock w-6 text-slate-400"></i> Third & Fourth Stages</button></li>
+                <li><button onclick="showSection('factors')" id="btn-factors" class="nav-btn w-full text-left px-6 py-3 text-slate-600 hover:bg-slate-50 transition-colors locked-section"><i class="fa-solid fa-clock w-6 nav-icon hidden"></i><i class="fa-solid fa-lock w-6 text-slate-400"></i> Factors Affecting Duration</button></li>
+                <li><button onclick="showSection('abnormal')" id="btn-abnormal" class="nav-btn w-full text-left px-6 py-3 text-slate-600 hover:bg-slate-50 transition-colors locked-section"><i class="fa-solid fa-triangle-exclamation w-6 nav-icon hidden"></i><i class="fa-solid fa-lock w-6 text-slate-400"></i> Prolonged / Precipitous Labor</button></li>
+                <li><button onclick="showSection('partograph')" id="btn-partograph" class="nav-btn w-full text-left px-6 py-3 text-slate-600 hover:bg-slate-50 transition-colors locked-section"><i class="fa-solid fa-chart-line w-6 nav-icon hidden"></i><i class="fa-solid fa-lock w-6 text-slate-400"></i> Partograph & Monitoring</button></li>
+                <li><button onclick="showSection('mnemonics')" id="btn-mnemonics" class="nav-btn w-full text-left px-6 py-3 text-slate-600 hover:bg-slate-50 transition-colors border-t border-slate-200 mt-2 locked-section"><i class="fa-solid fa-brain w-6 text-labor nav-icon hidden"></i><i class="fa-solid fa-lock w-6 text-slate-400"></i> Mnemonics & Pearls</button></li>
+                <li><button onclick="showSection('final_quiz_sec')" id="btn-final_quiz_sec" class="nav-btn w-full text-left px-6 py-3 text-slate-600 hover:bg-slate-50 transition-colors locked-section"><i class="fa-solid fa-graduation-cap w-6 text-amber-500 nav-icon hidden"></i><i class="fa-solid fa-lock w-6 text-slate-400"></i> Final 50‑Item Exam</button></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="flex-1 h-full overflow-y-auto bg-slate-100 relative w-full">
+        <div class="fixed top-16 md:top-4 right-4 md:right-8 z-40 flex items-center bg-white/90 backdrop-blur px-4 py-3 rounded-full shadow-lg border border-slate-200 cursor-pointer hover:bg-slate-50 transition-colors" onclick="toggleRecallMode()">
+            <span class="mr-3 text-sm font-bold text-slate-700 hidden md:inline"><i class="fa-solid fa-brain text-labor mr-1"></i> Active Recall</span>
+            <button id="recall-toggle" class="w-12 h-6 bg-slate-300 rounded-full relative transition-colors duration-300 focus:outline-none shadow-inner pointer-events-none">
+                <div id="recall-knob" class="w-5 h-5 bg-white rounded-full absolute top-0.5 left-0.5 transition-transform duration-300 shadow"></div>
+            </button>
+        </div>
+
+        <div class="p-4 md:p-8 max-w-6xl mx-auto pb-32">
+            <!-- HOME SECTION -->
+            <section id="home" class="content-section flex flex-col items-center justify-center min-h-[80vh] text-center block">
+                <div class="bg-gradient-to-br from-slate-800 to-labor-dark text-white rounded-3xl shadow-2xl p-10 md:p-16 w-full relative overflow-hidden">
+                    <div class="absolute top-0 right-0 -mt-10 -mr-10 text-white opacity-5 pointer-events-none"><i class="fa-solid fa-hourglass-end text-[20rem]"></i></div>
+                    <div class="relative z-10">
+                        <div class="bg-white/10 backdrop-blur-sm inline-block p-4 rounded-full text-amber-300 mb-6 shadow-sm border border-white/20">
+                            <i class="fa-solid fa-clock text-5xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-300 mb-2 uppercase tracking-widest">Maternal & Child Health Nursing</h3>
+                        <h1 class="text-4xl md:text-6xl font-black text-white mb-6 leading-tight drop-shadow-md">Duration of Labor</h1>
+                        <div class="bg-white/10 backdrop-blur inline-block px-6 py-3 rounded-full mb-10 border border-white/20">
+                            <p class="text-lg text-white font-medium">Stages, Phases, Timings | <strong class="font-black">Adele Pillitteri, 7e</strong></p>
+                        </div>
+                        <button onclick="unlockFirstSection()" class="bg-slate-600 hover:bg-slate-500 text-white font-black py-4 px-10 rounded-full shadow-xl transition-transform hover:scale-105 text-lg flex items-center mx-auto focus:outline-none">
+                            Begin Module <i class="fa-solid fa-arrow-right ml-3"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 1. OVERVIEW: 4 STAGES -->
+            <section id="stages" class="content-section hidden">
+                <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8">
+                    <h2 class="text-3xl font-black text-slate-800 mb-4 border-b-2 border-labor pb-3"><i class="fa-solid fa-chart-line text-labor mr-4"></i> The 4 Stages of Labor (Pillitteri)</h2>
+                    <div class="grid md:grid-cols-2 gap-5">
+                        <div class="bg-blue-50 p-4 rounded-xl"><strong>First Stage (Dilation)</strong><br>Onset of true contractions → full cervical dilation (10 cm). Longest stage.</div>
+                        <div class="bg-green-50 p-4 rounded-xl"><strong>Second Stage (Expulsion)</strong><br>Full dilation → birth of infant. Pushing phase.</div>
+                        <div class="bg-amber-50 p-4 rounded-xl"><strong>Third Stage (Placental)</strong><br>Birth of infant → delivery of placenta. Shortest stage.</div>
+                        <div class="bg-purple-50 p-4 rounded-xl"><strong>Fourth Stage (Recovery)</strong><br>First 1–4 hours postpartum; maternal stabilization.</div>
+                    </div>
+                    <div class="bg-labor-light mt-4 p-3 rounded-lg text-sm"><strong>⏱️ Total duration (nullipara):</strong> average 12–18 hours; <strong>multipara:</strong> 6–10 hours. Varies based on many factors.</div>
+                    <button onclick="openQuiz('stages')" class="mt-6 w-full bg-slate-800 text-white font-black py-3 rounded-xl">Take Quiz → Unlock Next</button>
+                </div>
+            </section>
+
+            <!-- 2. FIRST STAGE PHASES -->
+            <section id="firststage" class="content-section hidden">
+                <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8">
+                    <h2 class="text-3xl font-black text-slate-800 mb-4 border-b-2 border-labor pb-3"><i class="fa-solid fa-chart-simple text-labor mr-4"></i> First Stage: Phases & Durations</h2>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm border">
+                            <thead class="bg-labor text-white"><tr><th class="p-2">Phase</th><th class="p-2">Cervical Dilation</th><th class="p-2">Nullipara Duration</th><th class="p-2">Multipara Duration</th><th class="p-2">Contractions</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td class="border p-2 font-bold">Latent (Preparatory)</td><td class="reveal-text">0–3 cm</td><td class="reveal-text">≤20 hr (avg 6–8 hr)</td><td class="reveal-text">≤14 hr (avg 4–6 hr)</td><td class="reveal-text">Mild, irregular, 5–30 min apart</td></tr>
+                                <tr class="bg-slate-50"><td class="border p-2 font-bold">Active</td><td class="reveal-text">4–7 cm</td><td class="reveal-text">~3 hr (1.2 cm/hr avg)</td><td class="reveal-text">~2 hr (1.5 cm/hr avg)</td><td class="reveal-text">Moderate, 2–5 min apart, 40–60 sec</td></tr>
+                                <tr><td class="border p-2 font-bold">Transition</td><td class="reveal-text">8–10 cm</td><td class="reveal-text">~1 hr (up to 3 hr)</td><td class="reveal-text">~30 min (up to 1 hr)</td><td class="reveal-text">Strong, 1–2 min apart, 60–90 sec</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="bg-amber-50 mt-4 p-3 rounded-lg"><strong>📊 Prolonged latent phase:</strong> >20 hr nullipara, >14 hr multipara → may require rest/oxytocin.</div>
+                    <button onclick="openQuiz('firststage')" class="mt-6 w-full bg-slate-800 text-white font-black py-3 rounded-xl">Take Quiz → Unlock Next</button>
+                </div>
+            </section>
+
+            <!-- 3. SECOND STAGE -->
+            <section id="secondstage" class="content-section hidden">
+                <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8">
+                    <h2 class="text-3xl font-black text-slate-800 mb-4 border-b-2 border-labor pb-3"><i class="fa-solid fa-baby-carriage text-labor mr-4"></i> Second Stage (Expulsion)</h2>
+                    <p>Begins with <strong>complete cervical dilation (10 cm)</strong> and ends with <strong>birth of the infant</strong>. Divided into <span class="reveal-text">passive phase (fetal descent) and active phase (maternal pushing)</span>.</p>
+                    <div class="grid md:grid-cols-2 gap-5 mt-3">
+                        <div><strong>Nullipara average duration:</strong> <span class="reveal-text">~1 hour (up to 3 hours with epidural)</span></div>
+                        <div><strong>Multipara average duration:</strong> <span class="reveal-text">~20 minutes (up to 2 hours with epidural)</span></div>
+                        <div><strong>Signs of second stage:</strong> <span class="reveal-text">Urge to push, perineal bulging, crowning, increased bloody show.</span></div>
+                        <div><strong>Prolonged second stage:</strong> <span class="reveal-text">Nullipara >3 hr (with epidural >4 hr); Multipara >2 hr (>3 hr with epidural) → risk of maternal exhaustion/fetal distress.</span></div>
+                    </div>
+                    <div class="bg-labor-light p-3 rounded-lg mt-4"><i class="fa-regular fa-lightbulb"></i> <strong>Nursing tip:</strong> Encourage position changes, avoid prolonged Valsalva, and support perineal integrity.</div>
+                    <button onclick="openQuiz('secondstage')" class="mt-6 w-full bg-slate-800 text-white font-black py-3 rounded-xl">Take Quiz → Unlock Next</button>
+                </div>
+            </section>
+
+            <!-- 4. THIRD & FOURTH STAGES -->
+            <section id="thirdfourth" class="content-section hidden">
+                <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8">
+                    <h2 class="text-3xl font-black text-slate-800 mb-4 border-b-2 border-labor pb-3"><i class="fa-solid fa-hand-holding-heart text-labor mr-4"></i> Third & Fourth Stages</h2>
+                    <div class="grid md:grid-cols-2 gap-5">
+                        <div><strong>🔹 Third Stage (Placental)</strong><br>Duration: <span class="reveal-text">5–30 minutes (average 10–15 min)</span>. Signs of separation: fundus becomes globular, cord lengthens, gush of blood.<br><strong>Prolonged:</strong> >30 min → risk of hemorrhage.</div>
+                        <div><strong>🔹 Fourth Stage (Recovery/Immediate Postpartum)</strong><br>Duration: <span class="reveal-text">1–4 hours after placenta delivery</span>. Focus: fundus firm, lochia rubra, vital signs stable, bladder empty, bonding.</div>
+                    </div>
+                    <div class="bg-red-50 mt-4 p-3 rounded-lg"><strong>⚠️ Critical:</strong> Most postpartum hemorrhages occur in fourth stage. Assess fundus every 15 min ×1 hour, then every 30 min.</div>
+                    <button onclick="openQuiz('thirdfourth')" class="mt-6 w-full bg-slate-800 text-white font-black py-3 rounded-xl">Take Quiz → Unlock Next</button>
+                </div>
+            </section>
+
+            <!-- 5. FACTORS AFFECTING DURATION -->
+            <section id="factors" class="content-section hidden">
+                <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8">
+                    <h2 class="text-3xl font-black text-slate-800 mb-4 border-b-2 border-labor pb-3"><i class="fa-solid fa-clock text-labor mr-4"></i> Factors Affecting Labor Duration</h2>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li><strong>Parity:</strong> Multiparas have shorter labors (pelvis stretched, cervix more compliant).</li>
+                        <li><strong>Fetal size & position:</strong> Macrosomia, occiput posterior, or asynclitism prolong labor.</li>
+                        <li><strong>Pelvis adequacy:</strong> Android/platypelloid → longer, often obstructed.</li>
+                        <li><strong>Uterine contractions:</strong> Hypotonic (weak/irregular) prolongs; hypertonic (too frequent) causes distress.</li>
+                        <li><strong>Maternal position & mobility:</strong> Upright/ambulation shortens first stage.</li>
+                        <li><strong>Epidural analgesia:</strong> May prolong second stage (loss of urge to push).</li>
+                        <li><strong>Psychosocial:</strong> Anxiety increases catecholamines → slows labor; support shortens duration.</li>
+                        <li><strong>Induction/augmentation:</strong> Oxytocin can shorten but may cause hyperstimulation.</li>
+                    </ul>
+                    <button onclick="openQuiz('factors')" class="mt-6 w-full bg-slate-800 text-white font-black py-3 rounded-xl">Take Quiz → Unlock Next</button>
+                </div>
+            </section>
+
+            <!-- 6. PROLONGED / PRECIPITOUS LABOR -->
+            <section id="abnormal" class="content-section hidden">
+                <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8">
+                    <h2 class="text-3xl font-black text-slate-800 mb-4 border-b-2 border-labor pb-3"><i class="fa-solid fa-triangle-exclamation text-labor mr-4"></i> Prolonged & Precipitous Labor</h2>
+                    <div class="grid md:grid-cols-2 gap-5">
+                        <div class="bg-red-50 p-4 rounded-xl"><strong>⏳ Prolonged Labor (Dystocia)</strong><br>Definitions:<br>- Latent phase: >20 hr nullipara, >14 hr multipara<br>- Active phase arrest: no cervical change >4 hr despite adequate contractions<br>- Second stage prolonged: nullipara >3 hr, multipara >2 hr (or +1 hr with epidural)<br><strong>Risks:</strong> maternal exhaustion, infection, uterine rupture, fetal distress.</div>
+                        <div class="bg-amber-50 p-4 rounded-xl"><strong>⚡ Precipitous Labor</strong><br>Total labor <3 hours from onset to delivery.<br><strong>Risks:</strong> Lacerations, postpartum hemorrhage, fetal intracranial hemorrhage, neonatal trauma.<br><strong>Management:</strong> Avoid pushing until ready, support perineum, prepare for rapid delivery.</div>
+                    </div>
+                    <button onclick="openQuiz('abnormal')" class="mt-6 w-full bg-slate-800 text-white font-black py-3 rounded-xl">Take Quiz → Unlock Next</button>
+                </div>
+            </section>
+
+            <!-- 7. PARTOGRAPH -->
+            <section id="partograph" class="content-section hidden">
+                <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8">
+                    <h2 class="text-3xl font-black text-slate-800 mb-4 border-b-2 border-labor pb-3"><i class="fa-solid fa-chart-line text-labor mr-4"></i> Partograph & Labor Monitoring</h2>
+                    <p><strong>Partograph</strong> – graphical tool to monitor cervical dilation, descent, contractions, FHR, and maternal vitals. <span class="reveal-text">Alert line</span> (1 cm/hr) and <span class="reveal-text">action line</span> (4 hrs to the right) help identify prolonged labor early.</p>
+                    <ul class="list-disc pl-6 mt-3 space-y-1">
+                        <li>Plot cervical dilation hourly → deviation to the right of alert line → increase surveillance.</li>
+                        <li>Crossing action line → consider interventions (oxytocin, operative delivery).</li>
+                        <li>Descent of fetal head (station) also recorded.</li>
+                        <li>Contractions: frequency, duration, intensity (mild/moderate/strong).</li>
+                        <li>Maternal parameters: BP, pulse, temperature, urine output.</li>
+                    </ul>
+                    <div class="bg-labor-light p-3 rounded-lg mt-4"><i class="fa-regular fa-hospital"></i> <strong>WHO recommendation:</strong> Partograph use reduces prolonged labor and improves outcomes.</div>
+                    <button onclick="openQuiz('partograph')" class="mt-6 w-full bg-slate-800 text-white font-black py-3 rounded-xl">Take Quiz → Unlock Next</button>
+                </div>
+            </section>
+
+            <!-- 8. MNEMONICS & PEARLS -->
+            <section id="mnemonics" class="content-section hidden">
+                <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8">
+                    <h2 class="text-3xl font-black text-slate-800 mb-4 border-b-2 border-labor pb-3"><i class="fa-solid fa-brain text-labor mr-4"></i> Mnemonics & Clinical Pearls</h2>
+                    <div class="grid md:grid-cols-2 gap-5">
+                        <div class="bg-indigo-50 p-4 rounded-xl"><strong class="text-indigo-800">📌 Stages Mnemonic "LATE"</strong><br><span class="reveal-text">L – Latent (0–3 cm), A – Active (4–7 cm), T – Transition (8–10 cm), E – Expulsion (2nd stage).</span></div>
+                        <div class="bg-indigo-50 p-4 rounded-xl"><strong class="text-indigo-800">⏱️ Timing Mnemonic "10-1-1" (average dilation rates)</strong><br><span class="reveal-text">Nullipara: 1 cm/hr in active phase; Multipara: 1.5 cm/hr; Transition ~1 cm/hr.</span></div>
+                        <div class="bg-indigo-50 p-4 rounded-xl"><strong class="text-indigo-800">📊 Prolonged Labor Causes (3 P's)</strong><br><span class="reveal-text">Powers (inadequate contractions), Passenger (malposition, macrosomia), Passage (CPD).</span></div>
+                        <div class="bg-indigo-50 p-4 rounded-xl"><strong class="text-indigo-800">🩸 Third Stage "C.A.L.M."</strong><br><span class="reveal-text">C – Contraction of uterus (fundus firm), A – Adherent placenta (separation signs), L – Lengthening of cord, M – Maternal blood gush.</span></div>
+                    </div>
+                    <button onclick="openQuiz('mnemonics')" class="mt-6 w-full bg-slate-800 text-white font-black py-3 rounded-xl">Take Quiz → Unlock Final Exam</button>
+                </div>
+            </section>
+
+            <!-- FINAL EXAM SECTION -->
+            <section id="final_quiz_sec" class="content-section hidden">
+                <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8 text-center min-h-[60vh] flex flex-col justify-center items-center">
+                    <i class="fa-solid fa-graduation-cap text-8xl text-amber-500 mb-6"></i>
+                    <h2 class="text-4xl font-black text-slate-800 mb-4">Final 50‑Item Exam: Duration of Labor</h2>
+                    <p class="text-lg text-slate-600 mb-8 max-w-2xl">Comprehensive assessment covering stages, durations, abnormalities, partograph, and mnemonics. Score ≥75% to pass.</p>
+                    <button onclick="openQuiz('final_quiz')" class="w-full max-w-md bg-slate-800 text-white font-black py-4 rounded-xl shadow-md text-xl">Start Final Exam</button>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- QUIZ MODAL -->
+    <div id="quiz-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-slate-900/80 backdrop-blur-sm p-4">
+        <div class="bg-white w-full max-w-3xl rounded-2xl shadow-2xl p-6 md:p-8 relative max-h-[90vh] overflow-y-auto">
+            <button onclick="closeQuiz()" class="absolute top-4 right-4 text-slate-400 hover:text-red-500"><i class="fa-solid fa-xmark text-2xl"></i></button>
+            <h2 id="quiz-title" class="text-3xl font-black text-slate-800 mb-2"></h2>
+            <div id="quiz-questions-container" class="space-y-4 mt-4"></div>
+            <button id="quiz-submit-btn" onclick="submitQuiz()" class="mt-8 w-full bg-labor text-white font-bold py-4 rounded-xl shadow-lg">Submit Answers</button>
+            <div id="quiz-result-container" class="hidden mt-6 p-4 rounded-xl bg-slate-100"></div>
+        </div>
+    </div>
+
+    <script>
+        let unlockedSections = ['home'];
+        // QUIZZES (10 questions each)
+        const quizzes = {
+            stages: { title: "Overview: 4 Stages of Labor", next: "firststage", questions: [
+                { q: "The first stage of labor begins with:", options: ["Full cervical dilation", "Onset of true labor contractions", "Delivery of placenta", "Crowning"], ans: 1 },
+                { q: "Which stage is longest in nulliparas?", options: ["First stage", "Second stage", "Third stage", "Fourth stage"], ans: 0 },
+                { q: "The third stage ends with:", options: ["Birth of infant", "Delivery of placenta", "Cervical dilation 10 cm", "Uterine involution"], ans: 1 },
+                { q: "The fourth stage refers to:", options: ["First 24 hours postpartum", "First 1–4 hours after placenta delivery", "Postpartum week 1", "Immediate neonatal period"], ans: 1 },
+                { q: "Average total duration of labor for a nullipara is:", options: ["6–8 hours", "12–18 hours", "24–30 hours", "4–6 hours"], ans: 1 },
+                { q: "Which stage is most variable in length?", options: ["First stage", "Second stage", "Third stage", "Fourth stage"], ans: 0 },
+                { q: "The shortest stage of labor is usually the:", options: ["First stage", "Second stage", "Third stage", "Fourth stage"], ans: 2 },
+                { q: "Complete cervical dilation marks the end of:", options: ["First stage", "Second stage", "Third stage", "Latent phase"], ans: 0 },
+                { q: "The second stage begins at:", options: ["Onset of contractions", "Full dilation (10 cm)", "Delivery of placenta", "Rupture of membranes"], ans: 1 },
+                { q: "A patient who delivered 30 minutes ago is in which stage?", options: ["Second stage", "Third stage", "Fourth stage", "Postpartum period only"], ans: 2 }
+            ]},
+            firststage: { title: "First Stage Phases & Durations", next: "secondstage", questions: [
+                { q: "In the latent phase, cervical dilation is:", options: ["0–3 cm", "4–7 cm", "8–10 cm", "10 cm"], ans: 0 },
+                { q: "Prolonged latent phase in nullipara is defined as:", options: [">12 hours", ">20 hours", ">8 hours", ">24 hours"], ans: 1 },
+                { q: "Active phase cervical dilation rate for nullipara is approximately:", options: ["0.5 cm/hr", "1 cm/hr", "1.5 cm/hr", "2 cm/hr"], ans: 1 },
+                { q: "Transition phase contractions typically last:", options: ["20–30 sec", "30–45 sec", "60–90 sec", ">90 sec"], ans: 2 },
+                { q: "A multipara in active phase should dilate at least:", options: ["0.5 cm/hr", "1 cm/hr", "1.5 cm/hr", "2 cm/hr"], ans: 2 },
+                { q: "What is the average duration of transition phase in nullipara?", options: ["30 min", "1 hour", "2 hours", "3 hours"], ans: 1 },
+                { q: "Which phase is characterized by intense back pain, nausea, and irritability?", options: ["Latent", "Active", "Transition", "Second stage"], ans: 2 },
+                { q: "A nullipara has been 2 cm dilated for 22 hours. This is:", options: ["Normal latent phase", "Prolonged latent phase", "Active phase arrest", "Precipitous labor"], ans: 1 },
+                { q: "Contraction frequency in active phase is typically:", options: ["Every 10 min", "Every 5–8 min", "Every 2–5 min", "Every 1–2 min"], ans: 2 },
+                { q: "Which phase has the most rapid cervical dilation?", options: ["Latent", "Active", "Transition", "Second stage"], ans: 2 }
+            ]},
+            secondstage: { title: "Second Stage (Expulsion)", next: "thirdfourth", questions: [
+                { q: "Average second stage duration for nullipara without epidural is:", options: ["20 min", "1 hour", "2 hours", "3 hours"], ans: 1 },
+                { q: "Prolonged second stage in nullipara with epidural is defined as:", options: [">2 hours", ">3 hours", ">4 hours", ">1 hour"], ans: 2 },
+                { q: "The urge to push is mediated by:", options: ["Ferguson reflex (pressure on pelvic floor)", "Oxytocin surge", "Cervical stretching", "Fetal cortisol"], ans: 0 },
+                { q: "Which maternal position may shorten second stage?", options: ["Supine lithotomy", "Squatting or upright", "Trendelenburg", "Prone"], ans: 1 },
+                { q: "A multipara who has been pushing for 2.5 hours without progress is:", options: ["Within normal limits", "Prolonged second stage", "Precipitous second stage", "Transition phase"], ans: 1 },
+                { q: "Crowning indicates:", options: ["Full cervical dilation", "Fetal head visible at introitus", "Placental separation", "Uterine rupture"], ans: 1 },
+                { q: "Prolonged second stage increases risk for:", options: ["Postpartum hemorrhage", "Fetal acidosis", "Maternal exhaustion", "All of the above"], ans: 3 },
+                { q: "The passive phase of second stage involves:", options: ["Maternal pushing", "Fetal descent without pushing", "Placental delivery", "Cervical effacement"], ans: 1 },
+                { q: "In a nullipara with epidural, second stage may be prolonged up to:", options: ["2 hours", "3 hours", "4 hours", "6 hours"], ans: 2 },
+                { q: "Which finding indicates second stage has begun?", options: ["Cervix 10 cm, urge to push", "Contractions every 2 min", "Bloody show", "Rupture of membranes"], ans: 0 }
+            ]},
+            thirdfourth: { title: "Third & Fourth Stages", next: "factors", questions: [
+                { q: "Normal duration of third stage is:", options: ["1–5 minutes", "5–30 minutes", "30–60 minutes", "1–2 hours"], ans: 1 },
+                { q: "Sign of placental separation includes:", options: ["Fundus becomes globular and firm", "Cord lengthens", "Sudden gush of blood", "All of the above"], ans: 3 },
+                { q: "Prolonged third stage >30 minutes increases risk of:", options: ["Postpartum hemorrhage", "Infection", "Uterine inversion", "All of the above"], ans: 3 },
+                { q: "The fourth stage focuses on:", options: ["Cervical dilation", "Maternal hemodynamic stability and hemorrhage prevention", "Fetal descent", "Placental delivery"], ans: 1 },
+                { q: "During the fourth stage, fundus should be:", options: ["Boggy", "Firm and midline", "Deviated to right", "Above umbilicus"], ans: 1 },
+                { q: "Normal blood loss in third stage is:", options: ["<100 mL", "300–500 mL", "800–1000 mL", ">1500 mL"], ans: 1 },
+                { q: "The nurse should assess fundus every _____ during first hour of fourth stage.", options: ["5 minutes", "15 minutes", "30 minutes", "1 hour"], ans: 1 },
+                { q: "Which medication is commonly given in third stage to reduce hemorrhage?", options: ["Oxytocin", "Magnesium sulfate", "Terbutaline", "Nifedipine"], ans: 0 },
+                { q: "A patient delivers the placenta 45 minutes after birth. This is:", options: ["Normal", "Prolonged third stage", "Precipitous third stage", "Retained placenta"], ans: 1 },
+                { q: "During fourth stage, the nurse should monitor for:", options: ["Bladder distention", "Lochia amount", "Perineal hematoma", "All of the above"], ans: 3 }
+            ]},
+            factors: { title: "Factors Affecting Duration", next: "abnormal", questions: [
+                { q: "Which parity typically has shorter labor?", options: ["Nullipara", "Multipara", "Primigravida", "Elderly primigravida"], ans: 1 },
+                { q: "Epidural analgesia may:", options: ["Shorten first stage", "Prolong second stage", "Decrease need for oxytocin", "Accelerate placental delivery"], ans: 1 },
+                { q: "Maternal upright position during first stage is associated with:", options: ["Longer labor", "Shorter first stage", "More operative deliveries", "Increased pain"], ans: 1 },
+                { q: "Fetal occiput posterior position tends to:", options: ["Shorten labor", "Cause back pain and prolong labor", "Facilitate descent", "Have no effect"], ans: 1 },
+                { q: "High maternal anxiety releases catecholamines which:", options: ["Enhance uterine contractility", "Inhibit uterine activity and prolong labor", "Have no effect", "Increase pain only"], ans: 1 },
+                { q: "Which pelvic type is associated with the longest labor?", options: ["Gynecoid", "Android", "Anthropoid", "Platypelloid"], ans: 1 },
+                { q: "A macrosomic fetus (>4000 g) will most likely:", options: ["Speed up labor", "Prolong labor and increase risk of dystocia", "Have no effect on duration", "Cause precipitous delivery"], ans: 1 },
+                { q: "Continuous labor support (doula) has been shown to:", options: ["Increase cesarean rate", "Shorten labor duration", "Decrease maternal satisfaction", "Increase epidural use"], ans: 1 },
+                { q: "Oxytocin augmentation is used for:", options: ["Precipitous labor", "Prolonged labor due to hypotonic contractions", "Placental delivery", "Postpartum hemorrhage"], ans: 1 },
+                { q: "Which factor does NOT shorten labor?", options: ["Ambulation", "Multiparity", "High anxiety state", "Favorable pelvic shape"], ans: 2 }
+            ]},
+            abnormal: { title: "Prolonged & Precipitous Labor", next: "partograph", questions: [
+                { q: "Precipitous labor is defined as total labor lasting:", options: ["<2 hours", "<3 hours", "<5 hours", "<1 hour"], ans: 1 },
+                { q: "A patient with active phase arrest shows:", options: ["No cervical change for >4 hours despite adequate contractions", "Rapid dilation", "Preterm contractions", "Prolonged latent phase"], ans: 0 },
+                { q: "Which complication is associated with precipitous labor?", options: ["Postpartum hemorrhage", "Perineal lacerations", "Fetal intracranial hemorrhage", "All of the above"], ans: 3 },
+                { q: "Prolonged second stage in nullipara without epidural is defined as:", options: [">1 hour", ">2 hours", ">3 hours", ">4 hours"], ans: 2 },
+                { q: "The most common cause of prolonged active phase is:", options: ["Cephalopelvic disproportion", "Inadequate uterine contractions", "Maternal exhaustion", "Fetal malpresentation"], ans: 1 },
+                { q: "A patient with precipitous labor is at risk for:", options: ["Uterine rupture", "Shoulder dystocia", "Placenta accreta", "Prolonged third stage"], ans: 0 },
+                { q: "Prolonged latent phase in nullipara >20 hours may be treated with:", options: ["Therapeutic rest (sedation) or oxytocin if no progress", "Immediate cesarean", "Amniotomy alone", "Magnesium sulfate"], ans: 0 },
+                { q: "Which finding suggests dystocia due to passenger?", options: ["Occiput posterior position", "Hypotonic contractions", "Android pelvis", "Maternal fear"], ans: 0 },
+                { q: "Precipitous labor increases risk of neonatal:", options: ["Respiratory distress", "Hypoglycemia", "Subdural hematoma", "Sepsis"], ans: 2 },
+                { q: "Management of precipitous labor includes:", options: ["Encourage pushing immediately", "Support perineum, avoid forceful expulsion, prepare for neonatal resuscitation", "Administer oxytocin", "Perform episiotomy routinely"], ans: 1 }
+            ]},
+            partograph: { title: "Partograph & Monitoring", next: "mnemonics", questions: [
+                { q: "The partograph is used to:", options: ["Monitor fetal heart rate only", "Graphically track labor progress and detect abnormalities", "Record maternal blood pressure", "Document postpartum care"], ans: 1 },
+                { q: "On a partograph, the alert line represents:", options: ["Minimum acceptable cervical dilation rate (1 cm/hr)", "Time to transfer patient", "Action for cesarean", "Fetal descent"], ans: 0 },
+                { q: "If cervical dilation crosses the action line on partograph, the nurse should:", options: ["Wait 4 more hours", "Notify provider; consider interventions (oxytocin, operative delivery)", "Increase maternal hydration", "Change patient position"], ans: 1 },
+                { q: "The partograph includes plotting of:", options: ["Cervical dilation, station, contractions, FHR, vital signs", "Only cervical dilation", "Only fetal station", "Only maternal temperature"], ans: 0 },
+                { q: "WHO recommends partograph use to:", options: ["Reduce prolonged labor and improve outcomes", "Increase cesarean rates", "Replace vaginal exams", "Monitor only high-risk patients"], ans: 0 },
+                { q: "On the partograph, the latent phase is plotted on the:", options: ["Left side (0–3 cm)", "Right side (8–10 cm)", "At the bottom", "Separate graph"], ans: 0 },
+                { q: "Deviation to the right of the alert line indicates:", options: ["Faster than normal progress", "Slower than normal progress (risk of prolonged labor)", "Normal labor", "Fetal distress"], ans: 1 },
+                { q: "Which parameter is NOT typically recorded on a partograph?", options: ["Fetal heart rate", "Maternal urine output", "Amniotic fluid color", "Newborn weight"], ans: 3 },
+                { q: "In active phase, partograph should be filled every:", options: ["15 minutes", "30 minutes", "1 hour", "2 hours"], ans: 2 },
+                { q: "The action line is placed how many hours to the right of alert line?", options: ["2 hours", "4 hours", "6 hours", "8 hours"], ans: 1 }
+            ]},
+            mnemonics: { title: "Mnemonics & Pearls", next: "final_quiz_sec", questions: [
+                { q: "The mnemonic 'LATE' for stages of labor stands for:", options: ["Latent, Active, Transition, Expulsion", "Lightening, Active, True, Early", "Labor, Active, Transition, End", "Long, Active, Third, Expulsive"], ans: 0 },
+                { q: "Third stage signs 'C.A.L.M.' includes all EXCEPT:", options: ["Contraction", "Adherent placenta", "Lengthening of cord", "Maternal fever"], ans: 3 },
+                { q: "The mnemonic for causes of prolonged labor '3 P's' includes:", options: ["Powers, Passenger, Passage", "Pain, Position, Psyche", "Placenta, Pushing, Parity", "Prematurity, PROM, PIH"], ans: 0 },
+                { q: "In the '10-1-1' mnemonic for dilation rates, what does the '1' represent for nullipara active phase?", options: ["1 cm/hr", "1 cm every 2 hr", "1 inch/hr", "1 station per hour"], ans: 0 },
+                { q: "Which mnemonic helps recall normal second stage duration?", options: ["1 hour nullipara, 20 min multipara", "2-2-2 rule", "3-3-3 rule", "PAMELA"], ans: 0 },
+                { q: "Prolonged latent phase (nullipara) is defined as >____ hours using mnemonic '20'?", options: ["12", "20", "24", "30"], ans: 1 },
+                { q: "Precipitous labor mnemonic '<3' stands for:", options: ["<3 hours total labor", "<3 cm dilation per hour", "<3 contractions per 10 min", "<3 days postpartum"], ans: 0 },
+                { q: "The action line on partograph is at ____ hours to the right of alert line.", options: ["2", "4", "6", "8"], ans: 1 },
+                { q: "Which mnemonic is used for signs of placental separation?", options: ["C.A.L.M.", "L.A.T.E.", "P.O.W.E.R.", "V.E.A.L."], ans: 0 },
+                { q: "Using the mnemonic '10-1-1' for active phase: multipara dilation rate is about:", options: ["1 cm/hr", "1.5 cm/hr", "2 cm/hr", "0.5 cm/hr"], ans: 1 }
+            ]}
+        };
+        // Build final 50-item exam
+        let finalQ = [];
+        for(let sec of ['stages','firststage','secondstage','thirdfourth','factors','abnormal','partograph','mnemonics']) {
+            finalQ.push(...quizzes[sec].questions.slice(0,6));
+        }
+        while(finalQ.length < 50) finalQ.push({ q: "What is the average duration of the third stage of labor?", options: ["5 minutes", "15 minutes", "30 minutes", "45 minutes"], ans: 1 });
+        quizzes.final_quiz = { title: "Final 50‑Item Exam: Duration of Labor", next: null, questions: finalQ };
+
+        let currentQuiz = null;
+
+        function unlockFirstSection() { if(!unlockedSections.includes('stages')) { unlockedSections.push('stages'); updateSidebarUI(); } showSection('stages'); }
+        function showSection(sectionId) {
+            if (!unlockedSections.includes(sectionId) && sectionId !== 'home') { alert("Complete the Active Recall Quiz at the bottom of the previous section to unlock."); return; }
+            document.querySelectorAll('.content-section').forEach(el => el.classList.add('hidden'));
+            document.getElementById(sectionId)?.classList.remove('hidden');
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('bg-labor-light','text-labor-dark','border-r-4','border-labor-dark'));
+            const activeBtn = document.getElementById('btn-'+sectionId);
+            if(activeBtn) activeBtn.classList.add('bg-labor-light','text-labor-dark','border-r-4','border-labor-dark');
+            if(window.innerWidth < 768) document.getElementById('sidebar').classList.add('hidden');
+        }
+        function updateSidebarUI() {
+            const sections = ['home','stages','firststage','secondstage','thirdfourth','factors','abnormal','partograph','mnemonics','final_quiz_sec'];
+            sections.forEach(sec => {
+                const btn = document.getElementById('btn-'+sec);
+                if(!btn) return;
+                const lock = btn.querySelector('.fa-lock'), icon = btn.querySelector('.nav-icon');
+                if(unlockedSections.includes(sec) || sec==='home') { btn.classList.remove('locked-section'); if(lock) lock.classList.add('hidden'); if(icon) icon.classList.remove('hidden'); }
+                else { btn.classList.add('locked-section'); if(lock) lock.classList.remove('hidden'); if(icon) icon.classList.add('hidden'); }
+            });
+        }
+        function openQuiz(sectionId) { currentQuiz = sectionId; const qd = quizzes[sectionId]; if(!qd) return; document.getElementById('quiz-title').innerHTML = qd.title; const container = document.getElementById('quiz-questions-container'); container.innerHTML = ''; qd.questions.forEach((q, idx) => { let html = `<div class="bg-slate-50 p-4 rounded-xl mb-4"><p class="font-bold mb-3">${idx+1}. ${q.q}</p><div class="space-y-2">`; q.options.forEach((opt,oi) => { html += `<label class="flex items-center space-x-3 p-2 rounded-lg hover:bg-white cursor-pointer"><input type="radio" name="q${idx}" value="${oi}" class="form-radio text-labor"><span>${opt}</span></label>`; }); html += `</div><div class="feedback-${idx} text-sm mt-2 hidden"></div></div>`; container.innerHTML += html; }); document.getElementById('quiz-submit-btn').classList.remove('hidden'); document.getElementById('quiz-result-container').classList.add('hidden'); document.getElementById('quiz-modal').classList.remove('hidden'); }
+        function closeQuiz() { document.getElementById('quiz-modal').classList.add('hidden'); }
+        function submitQuiz() {
+            const qd = quizzes[currentQuiz];
+            if(!qd) return;
+            let score = 0;
+            for(let i=0; i<qd.questions.length; i++) {
+                const sel = document.querySelector(`input[name="q${i}"]:checked`);
+                if(sel && parseInt(sel.value)===qd.questions[i].ans) score++;
+                const fbDiv = document.querySelector(`.feedback-${i}`);
+                if(fbDiv){
+                    fbDiv.classList.remove('hidden');
+                    const correctTxt = qd.questions[i].options[qd.questions[i].ans];
+                    if(sel && parseInt(sel.value)===qd.questions[i].ans) { fbDiv.innerHTML='<span class="text-green-700">✓ Correct</span>'; fbDiv.parentElement?.classList.add('quiz-feedback-correct'); }
+                    else { const selectedTxt = sel? qd.questions[i].options[parseInt(sel.value)]:"No answer"; fbDiv.innerHTML=`<span class="text-red-700">✗ Incorrect. Correct: ${correctTxt}. You answered: ${selectedTxt}</span>`; fbDiv.parentElement?.classList.add('quiz-feedback-wrong'); }
+                }
+            }
+            let percent = (score/qd.questions.length)*100;
+            let resultDiv = document.getElementById('quiz-result-container');
+            document.getElementById('quiz-submit-btn').classList.add('hidden');
+            resultDiv.classList.remove('hidden');
+            if(percent>=75){
+                if(currentQuiz==='final_quiz'){ resultDiv.innerHTML=`<div class="text-green-600 text-4xl text-center">🎉 Excellent! Score ${score}/${qd.questions.length} (${percent}%)<br>You mastered Duration of Labor</div><button onclick="closeQuiz()" class="mt-4 bg-labor text-white px-6 py-2 rounded-xl">Close</button>`; return; }
+                if(quizzes[currentQuiz].next && !unlockedSections.includes(quizzes[currentQuiz].next)) unlockedSections.push(quizzes[currentQuiz].next);
+                if(quizzes[currentQuiz].next === 'mnemonics' && !unlockedSections.includes('final_quiz_sec')) unlockedSections.push('final_quiz_sec');
+                updateSidebarUI();
+                resultDiv.innerHTML=`<div class="text-green-600 text-3xl text-center">✅ Passed! (${score}/${qd.questions.length})</div><button onclick="closeQuiz(); showSection('${quizzes[currentQuiz].next}')" class="mt-4 bg-green-600 text-white px-6 py-2 rounded-xl">Unlock Next Section</button>`;
+            } else { resultDiv.innerHTML=`<div class="text-red-600 text-3xl text-center">❌ Failed: ${score}/${qd.questions.length} (${percent}%)<br>Need 75%</div><button onclick="openQuiz('${currentQuiz}')" class="mt-4 bg-slate-600 text-white px-6 py-2 rounded-xl">Try Again</button>`; }
+        }
+        function toggleRecallMode() { const active = !document.body.classList.contains('recall-mode'); const toggle=document.getElementById('recall-toggle'),knob=document.getElementById('recall-knob'); if(active){ document.body.classList.add('recall-mode'); toggle.classList.add('bg-labor-dark'); knob.classList.add('translate-x-6'); } else { document.body.classList.remove('recall-mode'); toggle.classList.remove('bg-labor-dark'); knob.classList.remove('translate-x-6'); } }
+        function toggleMobileMenu() { const s=document.getElementById('sidebar'); if(s.classList.contains('hidden')) s.classList.remove('hidden','flex','absolute','h-full','z-50'); else s.classList.add('hidden'); }
+        document.addEventListener('DOMContentLoaded', () => { updateSidebarUI(); document.querySelectorAll('.reveal-text').forEach(el => el.addEventListener('click', function(){ if(document.body.classList.contains('recall-mode')) this.classList.toggle('revealed'); })); });
+    </script>
+</body>
+</html>
